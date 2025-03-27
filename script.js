@@ -1,5 +1,6 @@
 let board = Array(9).fill(null);
 let currentPlayer = 'X';
+let gameOver = false;
 const statusElement = document.getElementById('status');
 
 showBoard(board);
@@ -28,6 +29,10 @@ function showBoard(board) {
 }
 
 function handleClick(index) {
+    if (gameOver) {
+        return;
+      }
+    
     if (board[index]) {
         return;
     }
@@ -38,11 +43,13 @@ function handleClick(index) {
     const winner = checkWinner(board); 
     if (winner) {                 //checks for winner
         statusElement.textContent = `Player ${winner} wins!`;
+        gameOver = true;
         return;
     }
 
     if (!board.includes(null)) { //checks for draw
         statusElement.textContent = `It's a draw!`;
+        gameOver = true;
         return;
       }
 
@@ -82,6 +89,7 @@ restartBtn.addEventListener('click', restartGame);
 function restartGame() {
   board = Array(9).fill(null);
   currentPlayer = 'X';
+  gameOver = false;
   showBoard(board);
   updateStatus();
 }
