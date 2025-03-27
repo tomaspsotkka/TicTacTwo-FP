@@ -2,7 +2,6 @@ let board = Array(9).fill(null);
 let currentPlayer = 'X';
 const statusElement = document.getElementById('status');
 
-
 showBoard(board);
 updateStatus();
 
@@ -20,6 +19,10 @@ function showBoard(board) {
             handleClick(index);
         });
 
+        if (cell) {
+            cellElement.classList.add('taken');
+          }
+
         boardElement.appendChild(cellElement);
     });
 }
@@ -30,13 +33,18 @@ function handleClick(index) {
     }
 
     board[index] = currentPlayer; //update board state
-    const winner = checkWinner(board);
-    if (winner) {
+    showBoard(board);
+
+    const winner = checkWinner(board); 
+    if (winner) {                 //checks for winner
         statusElement.textContent = `Player ${winner} wins!`;
         return;
     }
-    showBoard(board);
 
+    if (!board.includes(null)) { //checks for draw
+        statusElement.textContent = `It's a draw!`;
+        return;
+      }
 
     currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; //switch player
     updateStatus();
@@ -65,4 +73,15 @@ function checkWinner(board) {
     }
 
     return null;
+}
+
+//restart button functionality
+const restartBtn = document.getElementById('restartBtn');
+restartBtn.addEventListener('click', restartGame);
+
+function restartGame() {
+  board = Array(9).fill(null);
+  currentPlayer = 'X';
+  showBoard(board);
+  updateStatus();
 }
